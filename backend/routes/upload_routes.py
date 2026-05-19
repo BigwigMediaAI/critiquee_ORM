@@ -13,7 +13,7 @@ import logging
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-UPLOAD_DIR = Path("/app/uploads")
+UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
