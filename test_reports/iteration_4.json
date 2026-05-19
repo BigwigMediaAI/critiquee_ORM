@@ -1,0 +1,64 @@
+{
+  "summary": "Iteration 4 - Business Key Login Feature. Full backend (24 tests) and frontend (Playwright) testing completed. All Business Key login features verified end-to-end. Every test passed: key validation, SA/BA/Dept login with correct keys, cross-business key prevention, /api/auth/demo endpoint, SA Clients page with copy buttons, and success toast with business key on new client creation.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "SAClients - Create Client modal (Business Type select)",
+        "issues": [
+          "Pre-existing hydration warning: '<span> cannot be child of <option>/<select>'. Same as iteration_2/3 - caused by Emergent visual editor debug spans injected into select options. Not a code bug, no user impact."
+        ]
+      }
+    ]
+  },
+  "feature_verification": {
+    "login_key_field_above_email": "PASS - Key field at y=413, email at y=517 (key is above)",
+    "demo_credentials_sa_key": "PASS - Shows 'SA' key in Super Admin demo row",
+    "demo_credentials_biz_key_loaded": "PASS - Shows 'EOW-69RH8F' for Business Admin and Department User (fetched from /api/auth/demo)",
+    "click_demo_fills_form": "PASS - All 3 demo rows fill key/email/password correctly",
+    "super_admin_login": "PASS - key=SA + admin@handlyee.com navigates to /super-admin",
+    "business_admin_login": "PASS - key=EOW-69RH8F + manager@grandhotel.com navigates to /admin",
+    "dept_user_login": "PASS - key=EOW-69RH8F + frontdesk@grandhotel.com navigates to /dept",
+    "wrong_key_fails": "PASS - WRONG-KEY + valid BA creds returns 401, stays on login page",
+    "sa_key_for_ba_fails": "PASS - SA + BA email returns 401",
+    "biz_key_for_sa_fails": "PASS - EOW-69RH8F + SA email returns 401",
+    "missing_key_422": "PASS - POST /api/auth/login without key field returns 422",
+    "api_auth_demo": "PASS - GET /api/auth/demo returns {business_key: 'EOW-69RH8F', business_name: 'Grand Hotel'}",
+    "sa_clients_page_business_key": "PASS - All 4 clients show business_key (e.g. EOW-69RH8F) with Copy button (data-testid='copy-key-{id}')",
+    "new_client_creation_toast": "PASS - Toast shows: 'Client created! Business Key: TEZ-Z9GKQ7. Share this key with the business admin for login.'",
+    "key_format_abc_xxxxxx": "PASS - All generated keys match regex ^[A-Z]{3}-[A-Z0-9]{6}$",
+    "key_case_insensitive": "PASS - lowercase 'sa' works, lowercase 'eow-69rh8f' works",
+    "key_strip_spaces": "PASS - ' SA ' with spaces works after strip()"
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration4_login_key.py",
+    "/app/test_reports/pytest/pytest_iteration4.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "No critical issues found. All 13 test scenarios from the review request pass.",
+    "The /api/auth/demo endpoint finds the first non-TEST_ client using MongoDB find_one without a sort. This could return a different client if multiple non-TEST_ clients exist. Consider adding sort by created_at ascending to always return the original demo client reliably.",
+    "Business key generation (generate_business_key) retries up to 20 times to ensure uniqueness. Good defensive coding."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration4_login_key.py"
+  ],
+  "success_rate": {
+    "backend": "24/24 (100%)",
+    "frontend": "100% - all 13 feature checks verified passing"
+  },
+  "test_credentials": {
+    "super_admin": "key=SA / admin@handlyee.com / Handlyee@2024",
+    "business_admin": "key=EOW-69RH8F / manager@grandhotel.com / Test1234!",
+    "dept_user": "key=EOW-69RH8F / frontdesk@grandhotel.com / Test1234!"
+  },
+  "seed_data_creation": "Created and deactivated 2 test clients: TEST_KeyTest Hotel (BWN-ZQXKCL) and TEST_Toast_1771590639 (TEZ-Z9GKQ7). These appear in SA clients list as Paused.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Business Key login feature fully implemented and tested. Login page shows Key field, demo section has dynamic biz key from /api/auth/demo. All 3 roles login with correct keys. Wrong key / cross-key prevention works. SA Clients page shows business_key with copy button. New client creation shows key in success toast. Grand Hotel key=EOW-69RH8F. Minor pre-existing issue: Emergent visual editor span/select hydration warning in Create Client modal (no user impact). Two test clients created in DB: TEST_KeyTest Hotel (BWN-ZQXKCL, Paused) and TEST_Toast_1771590639 (TEZ-Z9GKQ7, Active)."
+}

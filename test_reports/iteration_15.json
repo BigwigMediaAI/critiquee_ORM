@@ -1,0 +1,41 @@
+{
+  "summary": "Iteration 15: Tested Event QR + AI Image Gen + i18n + Post Preview features. 18/18 backend tests PASSED including AI image generation (gpt-image-1). Frontend integration verified: language switching (en→es: 'Dashboard'→'Panel') + Arabic RTL persisting in localStorage; Event QR sidebar nav + page render; Create Post Preview dialog + AI Image dialog open correctly; public event registration end-to-end works (success state displayed). Minor: review_request data-testid names diverge from actual code (e.g. expected 'create-event-button' but code uses 'create-event-btn').",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_events_and_ai.py",
+    "/app/test_reports/pytest/iteration15_results.xml"
+  ],
+  "action_items": [
+    "OPTIONAL: Align actual data-testids in /app/frontend/src/pages/admin/EventQR.jsx with review_request names — currently 'create-event-btn' (vs requested 'create-event-button'), 'event-search-input' (vs 'events-search-input'), 'filter-status' (vs 'events-status-filter'), 'filter-lifecycle' (vs 'events-lifecycle-filter'), 'create-event-submit-btn' (vs 'event-save-button'), 'event-row-{id}', 'view-regs-{id}', 'active-toggle-{id}', 'download-qr-{id}', etc. Functionality is correct; only the names differ from spec. Update either the spec or the testids for future automation consistency.",
+    "OPTIONAL: Public registration form inputs lack data-testids (reg-name-input/reg-email-input/reg-mobile-input/reg-submit-btn). Tests had to fall back to input[name]/type selectors. Consider adding testids."
+  ],
+  "critical_code_review_comments": [
+    "event_routes.py uses string ISO comparisons but tolerates timezone-naive inputs in _compute_lifecycle — good defensive coding. ✓",
+    "Public endpoint /api/events/public/{id} correctly excludes client_id/branch_id from response — no PII/internal-id leak. ✓",
+    "Duplicate registration check uses lowercased email — consistent with persistence. ✓",
+    "ai_routes.generate_image: number_of_images is silently capped to max 1 via min(req.number_of_images,1); request schema allows users to pass higher values that are silently overridden. Consider raising 422 or documenting.",
+    "ai_routes.generate_image: returns 500 on any exception including rate-limits/quotas — would be better to surface 429/503 with clear retry-after info.",
+    "event_routes: no pagination on list_events (.to_list(500)) — fine for now but flag for scale. Same for export endpoints (5000/10000 cap)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_events_and_ai.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (18/18 tests passed)",
+    "frontend": "100% (all 5 verified flows working: language switch, Arabic RTL, Event QR nav, Preview dialog, AI dialog, public registration end-to-end)"
+  },
+  "test_credentials": "Business Admin: key=EOW-69RH8F, email=manager@grandhotel.com, password=Test1234! (used successfully)",
+  "seed_data_creation": "Pytest created+deleted 'TEST_Event_QR_PyTest' (cleaned up). Playwright created persistent 'PW Test Event 2030' and 'Test Gala' events with 1+ registrations each — left for future testing reference.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All four iter-15 features (Post Preview, AI Image Gen, i18n with 10 langs, Event QR) are working end-to-end — backend + frontend + integration. Use /app/backend/tests/test_events_and_ai.py as the regression harness (includes a real call to gpt-image-1 which may take ~20s). For Playwright tests, the actual data-testids on Event QR page differ from the review_request spec; refer to the grep output in this report or read /app/frontend/src/pages/admin/EventQR.jsx directly. Public registration page at /event/:eventId has no testids on its inputs — use input[name='name'|'email'|'mobile'] or input[type='email'] selectors.",
+  "rca_of_the_issue": "N/A — no bugs found."
+}

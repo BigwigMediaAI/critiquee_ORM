@@ -1,0 +1,216 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "Handlyee",
+      "persona": "E1 - The Anti-AI Designer",
+      "tone": "Professional, Calm, Efficient, Intelligent",
+      "aesthetic": "Swiss High-Contrast SaaS"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Manrope, sans-serif",
+        "body": "Public Sans, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "weights": {
+        "light": 300,
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600,
+        "bold": 700,
+        "black": 900
+      },
+      "scale": {
+        "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+        "h2": "text-3xl font-semibold tracking-tight",
+        "h3": "text-2xl font-semibold tracking-tight",
+        "h4": "text-xl font-medium",
+        "body_lg": "text-lg leading-relaxed",
+        "body_base": "text-base leading-relaxed",
+        "body_sm": "text-sm leading-relaxed text-muted-foreground",
+        "caption": "text-xs font-medium uppercase tracking-wider text-muted-foreground"
+      }
+    },
+    "colors": {
+      "theme_mode": "system",
+      "palette": {
+        "light": {
+          "background": "#ffffff",
+          "foreground": "#0f172a",
+          "card": "#ffffff",
+          "card_foreground": "#0f172a",
+          "popover": "#ffffff",
+          "popover_foreground": "#0f172a",
+          "primary": "#1e40af",
+          "primary_foreground": "#f8fafc",
+          "secondary": "#f1f5f9",
+          "secondary_foreground": "#0f172a",
+          "muted": "#f1f5f9",
+          "muted_foreground": "#64748b",
+          "accent": "#f1f5f9",
+          "accent_foreground": "#1e40af",
+          "destructive": "#ef4444",
+          "destructive_foreground": "#f8fafc",
+          "border": "#e2e8f0",
+          "input": "#e2e8f0",
+          "ring": "#1e40af"
+        },
+        "dark": {
+          "background": "#020617",
+          "foreground": "#f8fafc",
+          "card": "#020617",
+          "card_foreground": "#f8fafc",
+          "popover": "#020617",
+          "popover_foreground": "#f8fafc",
+          "primary": "#3b82f6",
+          "primary_foreground": "#0f172a",
+          "secondary": "#1e293b",
+          "secondary_foreground": "#f8fafc",
+          "muted": "#1e293b",
+          "muted_foreground": "#94a3b8",
+          "accent": "#1e293b",
+          "accent_foreground": "#3b82f6",
+          "destructive": "#7f1d1d",
+          "destructive_foreground": "#f8fafc",
+          "border": "#1e293b",
+          "input": "#1e293b",
+          "ring": "#3b82f6"
+        },
+        "brand_specific": {
+          "ai_accent": "#7c3aed",
+          "ai_glow": "0 0 20px rgba(124, 58, 237, 0.3)",
+          "success": "#10b981",
+          "warning": "#f59e0b",
+          "error": "#ef4444",
+          "info": "#3b82f6"
+        }
+      }
+    },
+    "spacing": {
+      "container_padding": "p-6 md:p-8 lg:p-10",
+      "section_gap": "gap-8",
+      "card_padding": "p-6",
+      "grid_gap": "gap-6"
+    },
+    "layout": {
+      "dashboard_grid": "grid grid-cols-1 md:grid-cols-12 gap-6",
+      "bento_modes": {
+        "mode_a": "The Tetris Grid (Marketing)",
+        "mode_b": "High Density Grid (Dashboard)"
+      },
+      "containers": {
+        "main_wrapper": "min-h-screen bg-background text-foreground antialiased",
+        "dashboard_content": "flex-1 space-y-4 p-8 pt-6"
+      }
+    },
+    "components": {
+      "buttons": {
+        "primary": "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm transition-all active:scale-[0.98]",
+        "secondary": "bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all",
+        "outline": "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-all",
+        "ghost": "hover:bg-accent hover:text-accent-foreground transition-all"
+      },
+      "cards": {
+        "default": "rounded-xl border bg-card text-card-foreground shadow-sm",
+        "hoverable": "rounded-xl border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer",
+        "glass": "bg-white/70 dark:bg-black/60 backdrop-blur-xl border border-white/20 shadow-sm"
+      },
+      "inputs": {
+        "default": "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      },
+      "badges": {
+        "default": "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+        "success": "border-transparent bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/25",
+        "warning": "border-transparent bg-amber-500/15 text-amber-700 dark:text-amber-400 hover:bg-amber-500/25",
+        "error": "border-transparent bg-red-500/15 text-red-700 dark:text-red-400 hover:bg-red-500/25"
+      }
+    },
+    "visual_enhancers": {
+      "shadows": {
+        "sm": "shadow-sm",
+        "md": "shadow-md",
+        "lg": "shadow-lg",
+        "glow": "shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+      },
+      "borders": {
+        "default": "border border-border",
+        "subtle": "border border-border/50",
+        "highlight": "border-l-4 border-l-primary"
+      },
+      "radius": {
+        "default": "rounded-lg",
+        "sm": "rounded-md",
+        "lg": "rounded-xl",
+        "full": "rounded-full"
+      }
+    },
+    "motion": {
+      "transitions": {
+        "default": "transition-all duration-200 ease-in-out",
+        "smooth": "transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+      },
+      "animations": {
+        "fade_in": "animate-in fade-in zoom-in-95 duration-300",
+        "slide_up": "animate-in slide-in-from-bottom-2 fade-in duration-300"
+      }
+    },
+    "assets": {
+      "icons": {
+        "library": "lucide-react (primary), react-icons (for brands)",
+        "social": {
+          "google": "FcGoogle (react-icons/fc)",
+          "facebook": "FaFacebook (react-icons/fa)",
+          "instagram": "FaInstagram (react-icons/fa)",
+          "twitter": "FaTwitter (react-icons/fa) / FaXTwitter",
+          "linkedin": "FaLinkedin (react-icons/fa)",
+          "tripadvisor": "FaTripadvisor (react-icons/fa)"
+        }
+      },
+      "images": {
+        "user_avatars": [
+          "https://images.unsplash.com/photo-1758599543120-4e462429a4d7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MTU3OTUwOXww&ixlib=rb-4.1.0&q=85",
+          "https://images.unsplash.com/photo-1769636929261-e913ed023c83?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MTU3OTUwOXww&ixlib=rb-4.1.0&q=85",
+          "https://images.unsplash.com/photo-1762522927402-f390672558d8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MTU3OTUwOXww&ixlib=rb-4.1.0&q=85"
+        ],
+        "locations": [
+          "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBob3RlbCUyMGxvYmJ5JTIwbHV4dXJ5JTIwaW50ZXJpb3J8ZW58MHx8fHwxNzcxNTc5NDk3fDA&ixlib=rb-4.1.0&q=85",
+          "https://images.pexels.com/photos/34077115/pexels-photo-34077115.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        ],
+        "placeholders": {
+          "logo": "https://via.placeholder.com/150",
+          "cover": "https://via.placeholder.com/800x400"
+        }
+      }
+    }
+  },
+  "implementation_guide": {
+    "phases": [
+      "1. Setup Base Layout (Sidebar + Navbar + Content Area)",
+      "2. Implement Dashboard Grid (Overview + Charts)",
+      "3. Build Review Management Module (List + Filters + Reply)",
+      "4. Build Social Feed Module (Card Layout + Reply)",
+      "5. Implement Settings & User Management"
+    ],
+    "universal_guidelines": [
+      "Use 'Manrope' for all Headings (h1-h3) and 'Public Sans' for body text.",
+      "NEVER use generic 'Inter' for Headings.",
+      "Primary Action Buttons must be solid Primary color.",
+      "Secondary actions should be Ghost or Outline.",
+      "Use Shadcn 'Card' for all dashboard widgets.",
+      "Add 'data-testid' to all interactive elements.",
+      "Ensure Dark Mode support for every component using the 'dark:' prefix.",
+      "Use 'sonner' for all toast notifications.",
+      "Use 'lucide-react' for interface icons.",
+      "Use 'react-icons' specifically for brand logos (Google, Facebook, etc.).",
+      "Do not use gradients for backgrounds, keep it flat and clean.",
+      "Use 'recharts' for all analytics charts."
+    ],
+    "specific_instructions": {
+      "dashboard": "Use the 'Bento Mode B' (High Density) grid. Summary cards at top, main chart in middle, recent activity list on right.",
+      "review_card": "Card should show star rating clearly. Use Yellow-500 for stars. Platform icon (Google/FB) in top right.",
+      "ai_reply": "AI suggestions should appear in a subtle highlighted box (bg-violet-50 dark:bg-violet-900/20) with a 'Sparkles' icon.",
+      "sidebar": "Fixed left sidebar. Active state must have a distinct background color (accent) and primary text color.",
+      "notifications": "Use a red dot (bg-red-500) for unread notifications. Animate the dot with a pulse effect."
+    }
+  }
+}

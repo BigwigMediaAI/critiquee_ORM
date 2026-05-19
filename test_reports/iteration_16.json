@@ -1,0 +1,55 @@
+{
+  "summary": "Iteration 16: Tested AI Compose Post + Reply Signature + Category->Platform Picker. Backend: 12/12 pytest cases PASSED including platform-categories (11 cats incl. India/UAE/US plats), compose-post (200 + valid + 400-on-short), settings signature stored at CLIENT level even with branch_id, suggest-reply appends/strips signature based on toggle, custom-platforms saves with category and resolves Practo name. Frontend: AI Compose dialog works end-to-end (generate -> replace OK len=713 -> append OK new_len=1451). CRITICAL frontend BUG found: Settings page issues an HTTP (insecure) call to /api/settings/?branch_id=... which is blocked by the browser as Mixed Content — causes signature_enabled toggle changes to NOT persist after save+reload (toggle reverts to false). Share Review picker UI was not fully exercised in playwright due to the Settings exception aborting the run, but its data-testids and layout are correct per code review.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Settings -> save Reply Signature toggle",
+        "issue": "Browser console: 'Mixed Content: page loaded over HTTPS but requested insecure XMLHttpRequest endpoint http://social-sync-44.preview.emergentagent.com/api/settings/?branch_id=...'. The HTTP request is blocked, so signature_enabled does not persist (after save + reload, aria-checked='false' although user enabled it). Signature *text* persists because of an earlier successful pytest PUT against the same data via direct https call. Likely an axios/api client building a relative or http base URL in /admin/settings (other pages use https correctly — AI compose worked).",
+        "affected_selectors": ["[data-testid='signature-enabled-toggle']", "[data-testid='save-settings-btn']"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "AIComposePostDialog & Settings",
+        "issues": [
+          "React hydration warnings: native <select>/<option> rendered with extra <span data-ve-dynamic='true' style='display:contents'> wrappers (likely from a build/instrumentation step). Functional but produces console noise — recommend stripping x-ve-* spans for native HTML form elements."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iter16_compose_signature_platforms.py",
+    "/app/test_reports/pytest/iteration16_results.xml"
+  ],
+  "action_items": [
+    "FIX (HIGH): Settings page makes HTTP call to /api/settings/?branch_id=... which is blocked by Mixed Content policy. Ensure the API client uses process.env.REACT_APP_BACKEND_URL (https) for Settings GET/PUT, the same way AI Compose / Share Review pages do.",
+    "VERIFY after fix: enable Reply Signature toggle -> Save -> reload -> toggle should remain ON; textarea should be editable when ON and disabled when OFF (DB layer is correct).",
+    "MINOR: Strip <span data-ve-dynamic> wrappers around <option>/<select> elements to remove React hydration warnings."
+  ],
+  "critical_code_review_comments": [
+    "ai_routes.compose_post correctly enforces 3-char min and normalizes hashtags (prepends #, strips spaces). Good.",
+    "settings_routes correctly splits client-only keys (signature, signature_enabled) and writes them to clients collection regardless of branch_id query param. Good.",
+    "review_link_routes._platform_label_from_catalog falls through to legacy PLATFORM_OPTIONS — solid backward compat. PLATFORM_CATEGORIES contains 11 categories and explicitly covers Practo, Okadoc, Healthgrades, Bayut, 99acres, Zillow, Zomato, TripAdvisor as required.",
+    "AIComposePostDialog uses a native <select> with <span> wrappers from instrumentation — produces hydration warnings. Cosmetic but noisy.",
+    "Settings page suspected to construct API URL without REACT_APP_BACKEND_URL prefix (or uses a hardcoded http scheme) — see Mixed Content error. Other pages on same session call https correctly.",
+    "review_link_routes.add_custom_platform: branch_id default 'default' may collide if multiple branches add 'other' platforms with same custom name — consider unique index on (client_id, branch_id, platform_key, platform_name)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iter16_compose_signature_platforms.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12 tests passed)",
+    "frontend": "67% — AI Compose dialog: PASSED end-to-end. Settings signature: FAIL (Mixed Content HTTP call blocks save). Share Review picker: code/data-testids verified but live click-flow not completed due to prior step failure."
+  },
+  "test_credentials": "Business Admin: key=EOW-69RH8F, email=manager@grandhotel.com, password=Test1234! (used successfully). Branch ID: 6edd50b6-b316-4103-b1e2-593e768ae9b3.",
+  "seed_data_creation": "Pytest created custom platforms 'practo' and 'TEST_My Custom Site' under branch 6edd50b6 — auto-cleanup attempted in teardown_class. Backend left signature='TEST_SIG_— Best, Grand Hotel Team', signature_enabled=False on the client doc.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent fixes the Mixed Content (HTTP) call on Settings page, retest only that flow: enable signature toggle -> save -> reload -> assert toggle aria-checked=='true' and textarea editable. AI Compose flow + backend already validated; no need to re-run unless code changes touch them. Share Review picker should also be re-tested with playwright (test script in iteration_16.json conversation). Backend regression: rerun /app/backend/tests/test_iter16_compose_signature_platforms.py via `export $(grep -v ^# /app/frontend/.env | xargs) && pytest backend/tests/test_iter16_compose_signature_platforms.py -v`.",
+  "rca_of_the_issue": "RCA: Settings page makes an XHR to http://social-sync-44.preview.emergentagent.com/api/settings/?branch_id=... while the page is served over HTTPS. The browser blocks this as Mixed Content, so PUT signature_enabled never reaches the backend. Backend logic is correct (verified via pytest with explicit https). Likely root cause: the api util in Settings.jsx (or the axios instance it imports) is being given a non-https base URL — either REACT_APP_BACKEND_URL is being mis-stripped, or a hardcoded http:// was introduced. Reproduction: login -> /admin/settings -> open DevTools console -> toggle signature on -> click Save -> see 'Mixed Content' blocked. Fix: ensure all API calls use process.env.REACT_APP_BACKEND_URL exactly (which already is https://social-sync-44.preview.emergentagent.com)."
+}

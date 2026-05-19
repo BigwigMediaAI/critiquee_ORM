@@ -1,0 +1,151 @@
+<analysis>**original_problem_statement:** The user wants to build a platform named Handleey for businesses to manage online reviews and social media in one place. 
+
+**PRODUCT REQUIREMENTS:**
+- Core multi-tier user role system, branch-based workspaces, Business Key login, notifications.
+- Google My Business (GMB) dashboard with review statistics, competitor rankings, and an embeddable review widget.
+- Share Review Link feature with positive-sentiment routing to external platforms.
+- Background AI auto-reply feature for positive Google reviews.
+- Social media post creation with AI image generation and mock previews.
+- Event QR generation and public registration forms.
+- Reporting module with CSV exports and filters.
+- Platform internationalization (i18n).
+
+**User's preferred language**: English
+*(INSTRUCTION: Respond to the user in English only)*
+
+**what currently exists?** 
+A robust React/FastAPI/MongoDB application named Handleey. It includes multi-tier auth, GMB integration, OAuth for major social platforms (Google, Meta, X, YouTube), and a Share Review Link feature. Recently added features include an Event QR generation module with public registration, AI image generation (OpenAI GPT Image 1) in the post creator, internationalization (10 languages) via a dashboard selector, a global pagination system for all data tables, an embeddable HTML/React review widget for GMB, and comprehensive CSV reporting with date/platform filters. Code quality and security enhancements have been applied across the codebase.
+
+**Last working item**: 
+- Last item agent was working: The agent ran the Deployer Agent health check, which identified a blocker where  was preventing  files from being committed. The agent fixed the  file to allow  commits.
+- Status: NONE
+- Agent Testing Done: Y
+- Which testing method agent to use? NA
+- User Testing Done: N
+
+**All Pending/In progress Issue list**: 
+None active.
+
+**In progress Task List**: 
+None.
+
+**Upcoming and Future Tasks**:
+- **Upcoming Tasks (P1):**
+  - Implement the full department user assignment system, including assigning specific reviews/comments to users and notifying them.
+- **Future Tasks (Backlog/P2):**
+  - **Code Health Sprint:** Fix the remaining ~50 missing React hook dependencies (/) across the app to prevent stale closures.
+  - **Component Refactoring:** Split oversized React components (, , , ) into smaller, maintainable sub-components.
+  - **Backend Refactoring:** Break down high-complexity functions (, ).
+  - **Security:** Migrate frontend token storage from  to  cookies or secure session management.
+  - Build Super Admin's ability to manage client subscriptions/plans.
+  - Add scheduled automated weekly GMB email reports for business admins.
+  - Add bulk-select + bulk-delete/export capabilities to the newly paginated tables (Reviews, Events, Submissions).
+  - Add a global React Error Boundary to catch UI crashes gracefully.
+
+**Completed work in this session**:
+- Post Preview Dialog for Desktop/Mobile in Create Post (DONE)
+- AI Image Generation using  in Create Post (DONE)
+- i18n Language Selection (Top 10 languages) in Dashboard Header (DONE)
+- Event QR page, generation, and Public Registration form (DONE)
+- UI fixes for Event QR popup and Registrations dialog layout (DONE)
+- Fixed AI Image Gen S3 region mismatch () causing broken images (DONE)
+- Global  component applied to all listing pages (Reviews, Social, Departments, Branches, Events, Clients) (DONE)
+- Fixed crash in  due to missing import (DONE)
+- Fixed crash in  caused by an undefined  variable in the map function (DONE)
+- Embedding Reviews Tab added to GMB with iframe live preview, HTML, and React copyable snippets (DONE)
+- Reporting module upgraded with date/platform filters and CSV export endpoints (DONE)
+- Code Quality Fixes: Resolved undefined variables, replaced insecure  with , fixed array-index keys, and resolved Deployer  blocker (DONE)
+
+**Earlier issues found/mentioned but not fixed**:
+- Code review highlighted an XSS Vulnerability risk in  related to . The agent switched to using an iframe with , which mitigates this, but be mindful of XSS patterns if modifying the embed widget further.
+
+**Known issue recurrence from previous fork**:
+None.
+
+**Code Architecture**:
+- Backend: FastAPI, Python, MongoDB, APScheduler.
+- Frontend: React, Tailwind CSS, shadcn/ui, .
+
+**Key Technical Concepts**:
+- React Hooks context and routing.
+- Global Pagination via custom  hook.
+- i18n implementation for dynamic translations.
+- Cross-origin iframe rendering for embeddable widgets.
+- Emergent LLM Key usage via  for AI Operations.
+
+**key DB schema**:
+- : 
+- : 
+- : 
+
+**changes in tech stack**:
+- Added , ,  for translations.
+
+**All files of reference**:
+-  (Localization config and JSON files)
+-  (Global pagination component)
+-  &  (Embeddable widget logic)
+-  (GMB UI for embed snippets)
+-  & 
+-  & 
+-  (Updated AWS region)
+
+**Areas that need refactoring**:
+- Oversized components (, , , ).
+- Missing React hook dependencies causing linter warnings.
+- Backend functions with high cyclomatic complexity (e.g., ).
+
+**key api endpoints**:
+- : Generates AI images.
+- : Serves the embeddable review script.
+- : Exports filtered CSV data.
+- : Manages Event QR entities.
+
+**Critical Info for New Agent**:
+- **AWS S3 Region:** The bucket  is located in . The  in the backend  was specifically updated to  to prevent 301 redirect errors that break image rendering. Do not revert this to .
+- **Pagination:** A robust  component and  hook exist. Always use these when building new list or table views to maintain UI consistency.
+- **Deployer Readiness:** The  file was explicitly modified to allow  files to be committed, which was a strict requirement to pass the Deployer Agent health check.
+
+**documents and test reports created in this job**:
+- 
+- 
+- 
+
+**Last 10 User Messages and any pending HUMAN messages**:
+1. **User**: Add pagination in all listing data pages. (COMPLETED)
+2. **User**: Reported  is crashing. (COMPLETED)
+3. **User**: Reported  error on GMB page. (COMPLETED)
+4. **User**: Add Embedding Reviews tab in GMB page with a copyable script for scrolling reviews. (COMPLETED)
+5. **User**: Improve Reporting module with CSV download options and filters. (COMPLETED)
+6. **User**: Provided Code Quality Report with Critical and Important recommendations. (COMPLETED - Addressed critical vars, random, and keys).
+7. **User**: Provided Round 2 Code Quality Analysis Report. (COMPLETED - Addressed further array keys and  on specific hooks).
+8. **User**: Call Deployer Agent and Run Health Check. (COMPLETED - Fixed  blocker).
+
+**Project Health Check:**
+- Broken: None.
+- Mocked: Post Preview uses a static generic social card UI for the preview visualization.
+
+**3rd Party Integrations**:
+- OpenAI GPT Image 1 (Image Generation) — uses Emergent LLM Key.
+- OpenAI GPT-4o-mini (Sentiment/Auto-reply) — uses Emergent LLM Key.
+- AWS S3 (Image uploads) — requires User API Key (present in environment).
+- Google, Facebook, Instagram, X, YouTube — OAuth flows.
+
+**Testing status**:
+- Testing agent used after significant changes: YES ().
+- Troubleshoot agent used after agent stuck in loop: NO.
+- Test files created: None.
+- Known regressions: None.
+
+**Credentials to test flow**:
+Check  for latest credentials.
+
+**What agent forgot to execute**:
+Nothing. All user requests and deployer blockers were successfully handled.
+
+<TESTING METHOD>
+- if feature testing: use backend/frontend testing agent respectively or both
+- if backend/frontend minor yet recurring issue: use testing agent
+- If backend minor issue: main agent to test via curl, writing a small test file or use python -c
+- if frontend minor issue: use screenshot tool
+</TESTING METHOD></analysis>
