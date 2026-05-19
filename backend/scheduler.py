@@ -251,7 +251,7 @@ async def auto_reply_google_reviews():
                 logger.info(f"Auto-reply: Found {len(unreplied_reviews)} unreplied reviews for branch {branch_id}")
 
                 # Generate and post replies
-                from emergentintegrations.llm.chat import LlmChat, UserMessage
+                # from emergentintegrations.llm.chat import LlmChat, UserMessage
                 api_key = os.environ.get("EMERGENT_LLM_KEY")
                 if not api_key:
                     logger.error("Auto-reply: EMERGENT_LLM_KEY not configured")
