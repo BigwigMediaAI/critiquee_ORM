@@ -163,7 +163,7 @@ async def auto_reply_google_reviews():
     Only runs if google_auto_reply_enabled is set in the branch settings.
     """
     from database import db
-    from encryption import decrypt_value
+    from encryption import decrypt_token
     import os
     import httpx
 
@@ -218,7 +218,7 @@ async def auto_reply_google_reviews():
                 access_token = google_conn.get("access_token")
                 # Decrypt token if encrypted
                 try:
-                    access_token = decrypt_value(access_token)
+                    access_token = decrypt_token(access_token)
                 except Exception:
                     pass  # Token might not be encrypted
 

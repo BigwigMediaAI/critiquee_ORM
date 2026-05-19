@@ -25,7 +25,7 @@ cryptography==46.0.5
 requests==2.32.5
 httpx==0.28.1
 aiohttp==3.13.3
-
+emergentintegrations
 google-generativeai==0.8.3
 google-api-core==2.29.0
 google-api-python-client==2.190.0
