@@ -1,11 +1,18 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Bell, Check, CheckCheck, Star, MessageSquare, RefreshCw } from 'lucide-react';
-import { notificationApi } from '../api';
-import { useBranch } from '../context/BranchContext';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Button } from './ui/button';
-import { ScrollArea } from './ui/scroll-area';
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Bell,
+  Check,
+  CheckCheck,
+  Star,
+  MessageSquare,
+  RefreshCw,
+} from "lucide-react";
+import { notificationApi } from "../api";
+import { useBranch } from "../context/BranchContext";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Button } from "./ui/button";
+import { ScrollArea } from "./ui/scroll-area";
 
 const TYPE_ICONS = {
   review: Star,
@@ -14,15 +21,15 @@ const TYPE_ICONS = {
 };
 
 const TYPE_COLORS = {
-  review: 'text-amber-500',
-  comment: 'text-blue-500',
-  sync: 'text-emerald-500',
+  review: "text-amber-500",
+  comment: "text-blue-500",
+  sync: "text-emerald-500",
 };
 
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
+  if (mins < 1) return "just now";
   if (mins < 60) return `${mins}m ago`;
   const hrs = Math.floor(mins / 60);
   if (hrs < 24) return `${hrs}h ago`;
@@ -40,7 +47,10 @@ export default function NotificationBell() {
   const prevUnreadRef = useRef(0);
   const audioRef = useRef(null);
 
-  const branchParam = currentBranch ? { branch_id: currentBranch.id } : {};
+  const branchParam = useMemo(
+    () => (currentBranch ? { branch_id: currentBranch.id } : {}),
+    [currentBranch],
+  );
 
   const fetchUnreadCount = useCallback(async () => {
     try {
@@ -56,27 +66,34 @@ export default function NotificationBell() {
     } catch (e) {
       // silently ignore
     }
-  }, [currentBranch?.id]);
+  }, [branchParam]);
 
   const fetchNotifications = useCallback(async () => {
     setLoading(true);
     try {
-      const { data } = await notificationApi.getAll({ ...branchParam, limit: 30 });
+      const { data } = await notificationApi.getAll({
+        ...branchParam,
+        limit: 30,
+      });
       setNotifications(data.notifications || []);
     } catch (e) {
       // silently ignore
     } finally {
       setLoading(false);
     }
-  }, [currentBranch?.id]);
+  }, [branchParam]);
 
   const playSound = () => {
     try {
       if (!audioRef.current) {
-        audioRef.current = new Audio('data:audio/wav;base64,UklGRl4FAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToFAACAgICAgICAgICAgICAgICAgICAgICAgICA/f39/f39/f39/f39/f39/f39/f39/f39/f39+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8v/y8vLy8vLy8vLy8vLy8vLy8vLy+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+gYGBgYGBgYGBgYGBgYGBgYGBgYGBgYH19fX19fX19fX19fX19fX19fX19fX19fXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5bGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxqampqampqampqampqampqampqampqampoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4OD');
+        audioRef.current = new Audio(
+          "data:audio/wav;base64,UklGRl4FAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToFAACAgICAgICAgICAgICAgICAgICAgICAgICA/f39/f39/f39/f39/f39/f39/f39/f39/f39+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8v/y8vLy8vLy8vLy8vLy8vLy8vLy+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+gYGBgYGBgYGBgYGBgYGBgYGBgYGBgYH19fX19fX19fX19fX19fX19fX19fX19fXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5bGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxqampqampqampqampqampqampqampqampoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4OD",
+        );
       }
       audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => { /* audio autoplay blocked */ });
+      audioRef.current.play().catch(() => {
+        /* audio autoplay blocked */
+      });
     } catch (e) {
       // Audio not supported
     }
@@ -99,9 +116,13 @@ export default function NotificationBell() {
     e.stopPropagation();
     try {
       await notificationApi.markRead(id);
-      setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+      );
       setUnreadCount((c) => Math.max(0, c - 1));
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
   };
 
   const handleMarkAllRead = async () => {
@@ -109,13 +130,19 @@ export default function NotificationBell() {
       await notificationApi.markAllRead(branchParam);
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       setUnreadCount(0);
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
   };
 
   const handleClickNotif = (notif) => {
     if (!notif.read) {
-      notificationApi.markRead(notif.id).catch((err) => console.error('Mark read failed:', err));
-      setNotifications((prev) => prev.map((n) => (n.id === notif.id ? { ...n, read: true } : n)));
+      notificationApi
+        .markRead(notif.id)
+        .catch((err) => console.error("Mark read failed:", err));
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === notif.id ? { ...n, read: true } : n)),
+      );
       setUnreadCount((c) => Math.max(0, c - 1));
     }
     if (notif.link) {
@@ -137,7 +164,7 @@ export default function NotificationBell() {
               data-testid="notification-badge"
               className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold px-1 leading-none animate-pulse"
             >
-              {unreadCount > 99 ? '99+' : unreadCount}
+              {unreadCount > 99 ? "99+" : unreadCount}
             </span>
           )}
         </button>
@@ -149,7 +176,9 @@ export default function NotificationBell() {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-          <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
+          <h3 className="text-sm font-semibold text-foreground">
+            Notifications
+          </h3>
           {unreadCount > 0 && (
             <Button
               variant="ghost"
@@ -171,7 +200,10 @@ export default function NotificationBell() {
               Loading...
             </div>
           ) : notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-muted-foreground" data-testid="notification-empty">
+            <div
+              className="flex flex-col items-center justify-center py-10 text-muted-foreground"
+              data-testid="notification-empty"
+            >
               <Bell size={28} className="mb-2 opacity-30" />
               <span className="text-sm">No notifications yet</span>
             </div>
@@ -179,21 +211,26 @@ export default function NotificationBell() {
             <div className="divide-y divide-border">
               {notifications.map((n) => {
                 const Icon = TYPE_ICONS[n.type] || Bell;
-                const iconColor = TYPE_COLORS[n.type] || 'text-muted-foreground';
+                const iconColor =
+                  TYPE_COLORS[n.type] || "text-muted-foreground";
                 return (
                   <div
                     key={n.id}
                     onClick={() => handleClickNotif(n)}
                     data-testid={`notification-item-${n.id}`}
                     className={`flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors hover:bg-muted/50 ${
-                      !n.read ? 'bg-primary/5' : ''
+                      !n.read ? "bg-primary/5" : ""
                     }`}
                   >
-                    <div className={`mt-0.5 p-1.5 rounded-lg bg-muted shrink-0 ${iconColor}`}>
+                    <div
+                      className={`mt-0.5 p-1.5 rounded-lg bg-muted shrink-0 ${iconColor}`}
+                    >
                       <Icon size={14} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm leading-snug ${!n.read ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                      <p
+                        className={`text-sm leading-snug ${!n.read ? "font-medium text-foreground" : "text-muted-foreground"}`}
+                      >
                         {n.message}
                       </p>
                       <span className="text-xs text-muted-foreground mt-0.5 block">
