@@ -164,8 +164,8 @@ async def auto_reply_google_reviews():
     """
     from database import db
     from encryption import decrypt_token
-    import os
-    import httpx
+    # import os
+    # import httpx
 
     try:
         # Find all branches with auto-reply enabled
@@ -252,10 +252,10 @@ async def auto_reply_google_reviews():
 
                 # Generate and post replies
                 # from emergentintegrations.llm.chat import LlmChat, UserMessage
-                api_key = os.environ.get("EMERGENT_LLM_KEY")
-                if not api_key:
-                    logger.error("Auto-reply: EMERGENT_LLM_KEY not configured")
-                    continue
+                # api_key = os.environ.get("EMERGENT_LLM_KEY")
+                # if not api_key:
+                #     logger.error("Auto-reply: EMERGENT_LLM_KEY not configured")
+                #     continue
 
                 for review in unreplied_reviews:
                     try:
