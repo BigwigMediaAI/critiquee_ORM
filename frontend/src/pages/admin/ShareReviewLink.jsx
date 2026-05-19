@@ -289,7 +289,7 @@ export default function ShareReviewLink() {
   const fetchSettings = useCallback(async () => {
     setLoading(true);
     try {
-      const params = currentBranch ? { branch_id: currentBranch.id } : {};
+      const params = branchParam;
       const { data } = await reviewLinkApi.getSettings(params);
       setSettings(data);
       setDimensions(
@@ -306,7 +306,7 @@ export default function ShareReviewLink() {
   const fetchSubmissions = useCallback(async () => {
     setSubLoading(true);
     try {
-      const params = currentBranch ? { branch_id: currentBranch.id } : {};
+      const params = { ...branchParam };
       params.page = page;
       params.limit = perPage;
       if (ratingFilter !== "all") params.rating_filter = ratingFilter;
@@ -355,7 +355,7 @@ export default function ShareReviewLink() {
 
   const fetchCustomPlatforms = useCallback(async () => {
     try {
-      const params = currentBranch ? { branch_id: currentBranch.id } : {};
+      const params = branchParam;
       const { data } = await reviewLinkApi.getCustomPlatforms(params);
       setCustomPlatforms(data.platforms || []);
     } catch (err) {
@@ -425,9 +425,7 @@ export default function ShareReviewLink() {
   const handleExportCSV = async (period) => {
     setExporting(true);
     try {
-      const params = currentBranch
-        ? { branch_id: currentBranch.id, period }
-        : { period };
+      const params = { ...branchParam, period };
       const { data } = await reviewLinkApi.exportSubmissions(params);
       const url = window.URL.createObjectURL(
         new Blob([data], { type: "text/csv" }),
