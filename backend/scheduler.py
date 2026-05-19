@@ -283,14 +283,7 @@ Requirements:
 - Do not use emojis excessively
 - Return ONLY the reply text, nothing else"""
 
-                        chat = LlmChat(
-                            api_key=api_key,
-                            model="gpt-4o-mini"
-                        )
-                        response = await chat.send_async(
-                            messages=[UserMessage(text=prompt)]
-                        )
-                        reply_text = response.text.strip().strip('"')
+                        reply_text = f"Thank you {reviewer_name} for your valuable feedback!"
 
                         if not reply_text:
                             continue
